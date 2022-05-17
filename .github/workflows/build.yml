@@ -11,6 +11,7 @@ jobs:
         os:
           - macos-11
           - ubuntu-latest
+          - windows-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
