@@ -1,0 +1,50 @@
+on: [ push ]
+
+name: CI
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-11
+          - ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: chmod -R 777 *
+        run: chmod -R 777 *
+
+      # Init compilers
+      - run: ./gradlew clean --scan
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: cbindgen --force
+      - uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: bindgen --force
+
+      # Compile first pass
+      - run: ./gradlew assemble --scan
+        continue-on-error: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+        continue-on-error: true
+
+      # Compile second pass
+      - run: ./gradlew assemble --scan
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build

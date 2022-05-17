@@ -108,3 +108,9 @@ val generateCBindings = tasks.register("generateCBindings") {
 }
 
 tasks.getByName("assemble").dependsOn(generateCBindings)
+
+
+extensions.findByName("buildScan")?.withGroovyBuilder {
+    setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
+    setProperty("termsOfServiceAgree", "yes")
+}
