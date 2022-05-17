@@ -50,7 +50,8 @@ kotlin {
 
                     linkerOpts("-v")
                     linkerOpts("-L${project.projectDir.resolve("untitled/target/debug/").absolutePath}")
-                    linkerOpts("-lmyrust")
+//                    linkerOpts("-lmyrust")
+                    linkerOpts("-Wl,-undefined,dynamic_lookup") // resolve symbols in runtime
 //                    project.projectDir.resolve("untitled/target/debug/deps/untitled26-b64bf0fedd2d648a").walk().filter { it.isDirectory }.forEach {
 //                        linkerOpts("-L${it.normalize().absolutePath.replace("\\", "/")}")
 //                    }
