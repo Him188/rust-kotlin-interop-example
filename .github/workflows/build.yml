@@ -27,25 +27,19 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: cbindgen --force
-      - uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: bindgen --force
+      - run: cargo install cbindgen --force
+        working-directory: untitled
+      - run: cargo install bindgen --force
+        working-directory: untitled
 
       # Compile first pass
       - run: ./gradlew assemble --scan
         continue-on-error: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
+      - run: cargo build --all --all-targets
+        working-directory: untitled
         continue-on-error: true
 
       # Compile second pass
       - run: ./gradlew assemble --scan
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
+      - run: cargo build --all --all-targets
+        working-directory: untitled
